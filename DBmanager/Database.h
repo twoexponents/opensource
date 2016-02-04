@@ -11,8 +11,16 @@
 
 #define SERVER "localhost"
 #define USER "root"
+
+#ifndef MMLAB
 #define PASSWORD "rhdckaktdlTdj1!"
 #define DATABASE "openwinnet_temp"
+
+#else
+#define PASSWORD "mmlab"
+#define DATABASE "openwinnet"
+
+#endif
 
 
 class Database {
