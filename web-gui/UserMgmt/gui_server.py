@@ -3,7 +3,7 @@
 import json
 
 
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, redirect
 from flask.ext.restful import Api, Resource, reqparse
 
 
@@ -20,6 +20,10 @@ def helloworld():
 @app.route('/list')
 def user_list():
   return render_template('userlist.html')
+
+@app.route('/ap/')
+def redir():
+  return redirect('http://www.naver.com', code=302)
   
 
 
