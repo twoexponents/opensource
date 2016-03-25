@@ -91,7 +91,7 @@ class DBHandler():
         """%(uid, uname, priority, devices, uname, priority, devices)
 
       cursor.execute(sql)
-      conn.commit()
+      self.connection.commit()
 
     except Exception, e:
       print data, e
