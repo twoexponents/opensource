@@ -9,8 +9,9 @@ app.config(['$interpolateProvider', '$httpProvider', function($interpolateProvid
 }]);
 
 
-app.controller('homeCtrl', ['$rootScope', '$scope', '$http', '$location', '$window', function($rootScope, $scope, $http, $location, $window) {
+app.controller('qosCtrl', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
   $scope.hideform = true;
+  /*
   $scope.options = {
     priority:[
       {id:'1', name: '1'},
@@ -33,16 +34,18 @@ app.controller('homeCtrl', ['$rootScope', '$scope', '$http', '$location', '$wind
     priority: '',
     devices:[]
   };
+  */
 
   $scope.getList = function() {
-    $http.get("http://interest.snu.ac.kr:8000/api/user/all")
+    $http.get("http://interest.snu.ac.kr:8000/api/ap/all")
       .success(function(response) {
-        $scope.users = response;
+        $scope.aps = response;
       });
   };
 
 
   $scope.getList();
+  /*
 
   $scope.editUser = function(user) {
     $scope.hideform = false;
@@ -124,22 +127,20 @@ app.controller('homeCtrl', ['$rootScope', '$scope', '$http', '$location', '$wind
   $scope.$watch('submit_form.uname', function() {$scope.test();});
   $scope.$watch('submit_form.priority', function() {$scope.test();});
   $scope.$watch('submit_form.devices', function() {$scope.test();});
+  
 
   $scope.test = function() {
     $scope.incomplete = true;
     if ($scope.submit_form.uid !== "" && 
         $scope.submit_form.uname !== "" && 
-        $scope.submit_form.priority !== "" /*&& 
-        $scope.udevices.length */) {
+        $scope.submit_form.priority !== "" ) {
       $scope.incomplete = false;
     }
   };
 
-  $scope.isActive = function (viewLocation) { 
-    return viewLocation === $location.path();
-  };
+  $scope.page_name = 'qos';
+  */
 
-  $scope.active= 'active';
 
 }]);
 

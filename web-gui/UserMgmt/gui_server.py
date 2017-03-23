@@ -25,7 +25,10 @@ def user_list():
 def redir():
   return redirect('http://www.naver.com', code=302)
   
-
+@app.route('/qos/')
+def qos():
+  return render_template('qos.html')
+ 
 
 
 if __name__ == '__main__':
