@@ -11,33 +11,22 @@ app.config(['$interpolateProvider', '$httpProvider', function($interpolateProvid
 
 app.controller('qosCtrl', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
   $scope.hideform = true;
-  /*
   $scope.options = {
-    priority:[
-      {id:'1', name: '1'},
-      {id:'2', name: '2'},
-      {id:'3', name: '3'},
-      {id:'4', name: '4'},
-      {id:'5', name: '5'},
-      {id:'6', name: '6'},
-      {id:'7', name: '7'},
-      {id:'8', name: '8'},
-      {id:'9', name: '9'},
-      {id:'10', name: '10'}
-    ],
     devices:['wired', 'wireless']
   };
 
   $scope.submit_form = {
-    uid: '',
-    uname: '',
-    priority: '',
-    devices:[]
+    ssid: '',
+    ap_ip: '',
+    target_ip: '',
+    target_prefix: '',
+    target_ports:'',
+    uplink:'',
+    downlink:''
   };
-  */
 
   $scope.getList = function() {
-    $http.get("http://interest.snu.ac.kr:8000/api/ap/all")
+    $http.get("http://interest.snu.ac.kr:8000/api/qos/all")
       .success(function(response) {
         $scope.aps = response;
       });
@@ -45,62 +34,52 @@ app.controller('qosCtrl', ['$rootScope', '$scope', '$http', function($rootScope,
 
 
   $scope.getList();
-  /*
 
-  $scope.editUser = function(user) {
+  $scope.editRecord = function(ap) {
     $scope.hideform = false;
-    if (user == 'new') {
+    if (ap== 'new') {
       $scope.edit = true;
       $scope.incomplete = true;
       $scope.modified = false;
 
-      $scope.submit_form.uid = '';
-      $scope.submit_form.uname = '';
-      $scope.submit_form.priority = '';
-      $scope.submit_form.devices = [];
+      $scope.submit_form.id ='';
+
+      $scope.submit_form.ssid = '';
+      $scope.submit_form.ap_ip= '';
+      $scope.submit_form.target_ip = '';
+      $scope.submit_form.target_prefix= '';
+      $scope.submit_form.target_ports='';
+      $scope.submit_form.uplink='';
+      $scope.submit_form.downlink='';
 
     } else {
       $scope.edit = false;
       $scope.modified = true;
 
-      $scope.submit_form.uid = user.uid;
-      $scope.submit_form.uname = user.uname;
-      $scope.submit_form.priority = user.priority.toString();
-      $scope.submit_form.devices = angular.copy(user.devices);
+      $scope.submit_form.id =ap.id;
+
+      $scope.submit_form.ssid = ap.ssid; 
+      $scope.submit_form.ap_ip= ap.ap_ip;
+      $scope.submit_form.target_ip = ap.target_ip;
+      $scope.submit_form.target_prefix= ap.target_ip_prefix_bits;
+      $scope.submit_form.target_ports=ap.target_ports;
+      $scope.submit_form.uplink=ap.qos_bandwidth_uplink;
+      $scope.submit_form.downlink=ap.qos_bandwidth_downlink;
+
     }
 
   };
 
-  $scope.delUser = function(user) {
-    var _url = "http://interest.snu.ac.kr:8000/api/user/" + user.uid;
+  $scope.delRecord = function(ap) {
+    var _url = "http://interest.snu.ac.kr:8000/api/qos/" + ap.id;
       $http.delete(_url).success(function(response) {
         $scope.getList();
         $scope.hideform = true;
       });
   };
 
-  // toggle selection for a given employee by name
-  $scope.toggleSelection = function toggleSelection(deviceName) {
-     var idx = $scope.submit_form.devices.indexOf(deviceName);
-     // is currently selected
-     if (idx > -1) {
-       $scope.submit_form.devices.splice(idx, 1);
-     }
-     // is newly selected
-     else {
-       $scope.submit_form.devices.push(deviceName);
-     }
-   };
-
-  $scope.refresh = function() {
-    $http.get("http://interest.snu.ac.kr:8000/api/user/all")
-      .success(function(response) {
-        $scope.users = response;
-      });
-  };
-
   $scope.submit = function() {
-    var _url = "http://interest.snu.ac.kr:8000/api/user/" + $scope.submit_form.uid;
+    var _url = "http://interest.snu.ac.kr:8000/api/qos/" + $scope.submit_form.d;
     var req = {
       method:'POST',
       url:_url,
@@ -123,23 +102,37 @@ app.controller('qosCtrl', ['$rootScope', '$scope', '$http', function($rootScope,
   };
 
 
-  $scope.$watch('submit_form.uid', function() {$scope.test();});
-  $scope.$watch('submit_form.uname', function() {$scope.test();});
-  $scope.$watch('submit_form.priority', function() {$scope.test();});
-  $scope.$watch('submit_form.devices', function() {$scope.test();});
+  $scope.$watch('submit_form.ssid', function() {$scope.test();});
+  $scope.$watch('submit_form.ap_ip', function() {$scope.test();});
+  $scope.$watch('submit_form.target_ip', function() {$scope.test();});
+  $scope.$watch('submit_form.target_prefix', function() {$scope.test();});
+  $scope.$watch('submit_form.target_ports', function() {$scope.test();});
+  $scope.$watch('submit_form.uplink', function() {$scope.test();});
+  $scope.$watch('submit_form.downlink', function() {$scope.test();});
   
 
   $scope.test = function() {
     $scope.incomplete = true;
-    if ($scope.submit_form.uid !== "" && 
-        $scope.submit_form.uname !== "" && 
-        $scope.submit_form.priority !== "" ) {
+    if ($scope.submit_form.ssid !== "" && 
+        $scope.submit_form.ap_ip !== "") {
       $scope.incomplete = false;
     }
+
+    if ($scope.submit_form.target_ip == "" &&
+        $scope.submit_form.target_ports == "") {
+      $scope.incomplete = true;
+    }
+    else if ($scope.submit_form.target_ip !== "" &&
+            $scope.submit_form.target_prefix == "") {
+      $scope.incomplete = true;
+    }
+    else if ($scope.submit_form.uplink == "" &&
+            $scope.submit_form.downlink == "") {
+      $scope.incomplete = true;
+    }
+
   };
 
-  $scope.page_name = 'qos';
-  */
 
 
 }]);

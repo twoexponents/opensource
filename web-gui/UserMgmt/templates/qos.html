@@ -16,83 +16,85 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>AP (ssid/ip)</th>
-        <th>Rule (ip)</th>
+        <th>AP Info.(ssid)</th>
+        <th>AP Info. (ip)</th>
+        <th>Rule (ip/prefix)</th>
         <th>Rule (port)</th>
-        <th>Action (uplink)</th>
-        <th>Action (downlink)</th>
+        <th>Action (uplink, KB/s)</th>
+        <th>Action (downlink, KB/s)</th>
       </tr>
     </thead>
-    <!--
     <tbody>
-      <tr ng-repeat="user in users">
-        <td>{[ user.uid ]}</td>
-        <td>{[ user.uname ]}</td>
-        <td>{[ user.priority ]}</td>
-        <td><span ng-repeat="device in user.devices">{[device]}{[$last ? '': ',']}</td>
+      <tr ng-repeat="ap in aps">
+        <td>{[ ap.ssid ]}</td>
+        <td>{[ ap.ap_ip ]}</td>
+        <td>{[ ap.target_ip ]}/{[ap.target_ip_prefix_bits]}</td>
+        <td>{[ ap.target_ports ]}</td>
+        <td>{[ ap.qos_bandwidth_uplink ]}</td>
+        <td>{[ ap.qos_bandwidth_downlink]}</td>
         <td>
-          <button class="btn" ng-click="editUser(user)">
+          <button class="btn" ng-click="editRecord(ap)">
             <span class="glyphicon glyphicon-pencil"></span>  Edit
           </button>
 
-          <button class="btn btn-danger" ng-click="delUser(user)">
+          <button class="btn btn-danger" ng-click="delRecord(ap)">
           <span class="glyphicon glyphicon-remove"></span> Delete
           </button>
         </td>
       </tr>
     </tbody>
-    -->
   </table>
 
   <hr>
-  <button class="btn btn-success" ng-click="editUser('new')">
-  <span class="glyphicon glyphicon-user"></span>  Create New User
+  <button class="btn btn-success" ng-click="editRecord('new')">
+  <span class="glyphicon glyphicon-user"></span>  Create New QoS Rule
   </button>
-
-  <!--
-  <button class="btn btn-primary" ng-click="updateChanges('new')">
-  <span class="glyphicon glyphicon-upload"></span>  Save Changes
-  </button>
-
-  <button class="btn btn-danger" ng-click="refresh()">
-  <span class="glyphicon glyphicon-refresh"></span>  Discard Changes
-  </button>
-  -->
 
   <hr>
 
   <form class="form-horizontal" ng-hide="hideform">
-    <h3 ng-show="edit">Create New User:</h3>
-    <h3 ng-hide="edit">Edit User:</h3>
+    <h3 ng-show="edit">Create New QoS Rule:</h3>
+    <h3 ng-hide="edit">Edit QoS Rule:</h3>
+    <!--hidden value required-->
+    <input type="hidden" name="id" value="">
     <div class="form-group">
-      <label class="col-sm-2 control-label">User ID:</label>
+      <label class="col-sm-2 control-label">AP ssid:</label>
       <div class="col-sm-10">
-      <input type="text" ng-model="submit_form.uid" ng-disabled="!edit" placeholder="User ID">
+      <input type="text" ng-model="submit_form.ssid" placeholder="ssid">
       </div>
     </div> 
     <div class="form-group">
-      <label class="col-sm-2 control-label">User Name:</label>
+      <label class="col-sm-2 control-label">AP ip:</label>
       <div class="col-sm-10">
-      <input type="text" ng-model="submit_form.uname" placeholder="User Name">
+      <input type="text" ng-model="submit_form.ap_ip" placeholder="AP ip">
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">User Priority</label>
+      <label class="col-sm-2 control-label">Target ip/prefix:</label>
       <div class="col-sm-10">
-      <select name="priority" id="priority" ng-model="submit_form.priority">
-        <option value="">---Select Priority---</option>
-        <option ng-repeat="option in options.priority" value={[option.id]}>{[option.name]}</option>
-      </select>
+      <input type="text" ng-model="submit_form.target_ip" placeholder="Target ip">
+      <input type="text" ng-model="submit_form.target_prefix" placeholder="Target prefix">
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Devices</label>
+      <label class="col-sm-2 control-label">Target ports:</label>
       <div class="col-sm-10">
-      <label ng-repeat="device in options.devices">
-        <input id="{[device]}" type="checkbox" value="{[device]}" ng-checked="submit_form.devices.indexOf(device) > -1" ng-click="toggleSelection(device)" /> {[device]}
-      </label>
+      <input type="text" ng-model="submit_form.target_ports" placeholder="Target ports">
       </div>
     </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Target Uplink Bandwidth (KB/s):</label>
+      <div class="col-sm-10">
+      <input type="text" ng-model="submit_form.uplink" placeholder="uplink">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Target Downlink Bandwidth (KB/s):</label>
+      <div class="col-sm-10">
+      <input type="text" ng-model="submit_form.downlink" placeholder="downlink">
+      </div>
+    </div>
+
     <hr>
     <button class="btn btn-success" ng-disabled="incomplete" ng-click="submit();">
     <span class="glyphicon glyphicon-save"></span>  Save Changes

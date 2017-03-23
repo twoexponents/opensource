@@ -63,7 +63,54 @@ class UserAPI(Resource):
 
     return 'Success' if ret else 'Fail'
 
+
+class QoSAPI(Resource):
+  def __init__(self):
+    self.reqparse = reqparse.RequestParser()
+
+    super(QoSAPI, self).__init__()
+
+  @cors.crossdomain(origin='*')
+  def get(self, id):
+    aps = []
+    if id != 'all':
+      aps = id.split(',')
+
+    resultset = db_handler.get_ap_qos(aps)
+
+    d = {}
+    for item in resultset:
+      d[item['id']] = item
+
+    return jsonify(d)
+
+  @cors.crossdomain(origin='*')
+  def post(self, id):
+    req = json.loads(request.data)
+    d = {'id':id}
+    if req is not None:
+      d = {k:v for k, v in req.iteritems()}
+    ret = db_handler.put_or_update_ap_qos(d)
+
+    return 'Success' if ret else 'Fail'
+
+  #@cors.crossdomain(origin='*')
+  def put(self, id):
+    req = json.loads(request.data)
+    ret = db_handler.put_or_update_ap_qos(req)
+
+    return 'Success'
+
+  @cors.crossdomain(origin='*')
+  def delete(self, id):
+    ret = db_handler.delete_ap_qos(id)
+
+    return 'Success' if ret else 'Fail'
+
+
 api.add_resource(UserAPI, '/api/user/<string:uid>', endpoint='user')
+api.add_resource(QoSAPI, '/api/qos/<string:id>', endpoint='qos')
+
 #api.add_resource(UserListAPI, '/api/userlist/<string:uids>', endpoint='users')
 
 
