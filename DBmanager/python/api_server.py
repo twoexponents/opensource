@@ -9,6 +9,8 @@ from flask.ext.restful import Api, Resource, reqparse
 from flask.ext.restful.utils import cors
 from flask.ext.cors import CORS
 
+from modules.ssh import QoSHandler
+
 
 app = Flask(__name__)
 CORS(app)
@@ -72,15 +74,46 @@ class QoSAPI(Resource):
 
   @cors.crossdomain(origin='*')
   def get(self, id):
+    tp = request.args.get('type')
+
     aps = []
     if id != 'all':
       aps = id.split(',')
 
-    resultset = db_handler.get_ap_qos(aps)
+    resultset = db_handler.get_all_aps(aps)
 
     d = {}
-    for item in resultset:
-      d[item['id']] = item
+
+    if tp is None or tp == "":
+      for ap in resultset:
+        print ap
+        try:
+          h = QoSHandler(ap['sudoer_id'], ap['sudoer_passwd'], ap['ap_ip'])
+          h.close()
+        except Exception, e:
+          continue
+
+      for item in resultset:
+        d[item['ap_ip']] = item
+
+    elif tp == "class":
+      for ap in resultset:
+        try:
+          h = QoSHandler(ap['sudoer_id'], ap['sudoer_passwd'], ap['ap_ip'])
+          d[ap['ap_ip']] = h.inquiry_class(ap)
+        except Exception, e:
+          print e
+
+    elif tp == "filter":
+      classid = request.args.get('classid')
+
+      for ap in resultset:
+        try:
+          h = QoSHandler(ap['sudoer_id'], ap['sudoer_passwd'], ap['ap_ip'])
+          d[ap['ap_ip']] = h.inquiry_filter(ap, classid)
+        except Exception, e:
+          print e
+          continue
 
     return jsonify(d)
 

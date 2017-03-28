@@ -127,15 +127,16 @@ class DBHandler():
     pass
 
    
-  def get_all_aps(self, aps=[]):
+  def get_ap_qos(self, aps=[]):
     if not self.connected:
       connect_db(self.config)
 
     cursor = self.cursor
 
     sql = """
-      SELECT ap_ip, ssid, target_ifname, sudoer_id, sudoer_passwd
-      FROM qos_target_aps
+      SELECT id, ssid, ap_ip, target_ip, target_ip_prefix_bits, target_ports,
+             qos_bandwidth_uplink, qos_bandwidth_downlink
+      FROM qos_rules_actions
       """
 
     if len(aps) > 0:
@@ -152,14 +153,14 @@ class DBHandler():
     return self.generate_return_form(values, cursor.description)
 
 
-  def put_or_update_aps(self, data):
+  def put_or_update_ap_qos(self, data):
     if data is None:
       return
 
     if not self.connected:
       connect_db(self.config)
 
-    update_values = [data['ssid'], data['target_ifname'], data['sudoer_id'], data['sudoer_passwd']]
+    update_values = [data['ssid'], data['ap_ip'], data['target_ip'], data['target_prefix'], data['target_ports'], data['uplink'], data['downlink']]
 
     cursor = self.cursor
 
