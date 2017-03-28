@@ -159,7 +159,7 @@ class DBHandler():
     if not self.connected:
       connect_db(self.config)
 
-    update_values = [data['ssid'], data['target_ifname'], data['sudoer_id'], data['sudoer_passwd']]
+    update_values = [data['ssid'], data['ap_ip'], data['target_ifname'], data['sudoer_id'], data['sudoer_passwd']]
 
     cursor = self.cursor
 
@@ -170,25 +170,23 @@ class DBHandler():
       if id != "":
         update_values_tuple = tuple(update_values+[id])
         sql = """
-          UPDATE qos_rules_actions
-          SET ssid = '%s', ap_ip = '%s', target_ip = '%s', target_ip_prefix_bits = %s,
-              target_ports = %s, qos_bandwidth_uplink = %s, qos_bandwidth_downlink = %s
+          UPDATE qos_target_aps
+          SET ssid = '%s', ap_ip = '%s', target_ifname = '%s',
+              sudoer_id = '%s', sudoer_passwd = %s
           WHERE id = %s
           """%update_values_tuple
       else:
         update_values_tuple = tuple(update_values)
         sql = """
-          INSERT INTO qos_rules_actions 
-            (ssid, ap_ip, target_ip, target_ip_prefix_bits, target_ports, qos_bandwidth_uplink, qos_bandwidth_downlink)
+          INSERT INTO qos_target_aps
+            (ssid, ap_ip, target_ifname, sudoer_id, sudoer_passwd)
           VALUES 
-            ('%s', '%s', '%s', %s, %s, %s, %s)
+            ('%s', '%s', '%s', '%s', '%s')
           """%update_values_tuple
 
       cursor.execute(sql)
       self.connection.commit()
     except Exception, e:
-      print id
-      print sql
       print data, e
       return False
 

@@ -83,10 +83,8 @@ class QoSAPI(Resource):
     resultset = db_handler.get_all_aps(aps)
 
     d = {}
-
     if tp is None or tp == "":
       for ap in resultset:
-        print ap
         try:
           h = QoSHandler(ap['sudoer_id'], ap['sudoer_passwd'], ap['ap_ip'])
           h.close()
@@ -123,14 +121,55 @@ class QoSAPI(Resource):
     d = {'id':id}
     if req is not None:
       d = {k:v for k, v in req.iteritems()}
-    ret = db_handler.put_or_update_ap_qos(d)
+
+    ret = db_handler.put_or_update_aps(d)
+
+    if d.has_key('classes'):
+      classes = d['classes'] # form {'classid':{'rate':'1600Kbit'}}
+      try:
+        h = QoSHandler(d['sudoer_id'], d['sudoer_passwd'], d['ap_ip'])
+        for cls in classes:
+          ret = h.modify_class(d['ap_ip'], cls)
+      except Exception, e:
+        print e
+
+    if d.has_key('filters'):
+      filters = d['filters'] # {'filterid':{'classid':'1:5', 'dest_ip':'192.168.42.10'}}
+      try:
+        h = QoSHandler(d['sudoer_id'], d['sudoer_passwd'], d['ap_ip'])
+        for flt in filters:
+          ret = h.modify_filters(d['ap_ip'], flt)
+      except Exception, e:
+        print e
 
     return 'Success' if ret else 'Fail'
 
   #@cors.crossdomain(origin='*')
   def put(self, id):
     req = json.loads(request.data)
-    ret = db_handler.put_or_update_ap_qos(req)
+    d = {}
+    if req is not None:
+      d = {k:v for k, v in req.iteritems()}
+
+    ret = db_handler.put_or_update_aps(d)
+
+    if d.has_key('classes'):
+      classes = d['classes'] # form {'classid':{'rate':'1600Kbit'}}
+      try:
+        h = QoSHandler(d['sudoer_id'], d['sudoer_passwd'], d['ap_ip'])
+        for cls in classes:
+          ret = h.add_class(d['ap_ip'], cls)
+      except Exception, e:
+        print e
+
+    if d.has_key('filters'):
+      filters = d['filters'] # {'filterid':{'classid':'1:5', 'dest_ip':'192.168.42.10'}}
+      try:
+        h = QoSHandler(d['sudoer_id'], d['sudoer_passwd'], d['ap_ip'])
+        for flt in filters:
+          ret = h.add_filters(d['ap_ip'], flt)
+      except Exception, e:
+        print e
 
     return 'Success'
 
