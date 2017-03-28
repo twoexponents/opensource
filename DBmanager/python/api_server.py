@@ -123,6 +123,7 @@ class QoSAPI(Resource):
       d = {k:v for k, v in req.iteritems()}
 
     ret = db_handler.put_or_update_aps(d)
+    """
 
     if d.has_key('classes'):
       classes = d['classes'] # form {'classid':{'rate':'1600Kbit'}}
@@ -141,6 +142,7 @@ class QoSAPI(Resource):
           ret = h.modify_filters(d['ap_ip'], flt)
       except Exception, e:
         print e
+    """
 
     return 'Success' if ret else 'Fail'
 
@@ -152,6 +154,7 @@ class QoSAPI(Resource):
       d = {k:v for k, v in req.iteritems()}
 
     ret = db_handler.put_or_update_aps(d)
+    """
 
     if d.has_key('classes'):
       classes = d['classes'] # form {'classid':{'rate':'1600Kbit'}}
@@ -170,12 +173,13 @@ class QoSAPI(Resource):
           ret = h.add_filters(d['ap_ip'], flt)
       except Exception, e:
         print e
+    """
 
     return 'Success'
 
   @cors.crossdomain(origin='*')
   def delete(self, id):
-    ret = db_handler.delete_ap_qos(id)
+    ret = db_handler.delete_aps(id)
 
     return 'Success' if ret else 'Fail'
 

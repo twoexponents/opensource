@@ -13,85 +13,78 @@
   {% include 'header.html' %}
 
   <h3>QoS Control Page</h3>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>AP Info.(ssid)</th>
-        <th>AP Info. (ip)</th>
-        <th>Rule (ip/prefix)</th>
-        <th>Rule (port)</th>
-        <th>Action (uplink, KB/s)</th>
-        <th>Action (downlink, KB/s)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="ap in aps">
-        <td>{[ ap.ssid ]}</td>
-        <td>{[ ap.ap_ip ]}</td>
-        <td>{[ ap.target_ip ]}/{[ap.target_ip_prefix_bits]}</td>
-        <td>{[ ap.target_ports ]}</td>
-        <td>{[ ap.qos_bandwidth_uplink ]}</td>
-        <td>{[ ap.qos_bandwidth_downlink]}</td>
-        <td>
-          <button class="btn" ng-click="editRecord(ap)">
-            <span class="glyphicon glyphicon-pencil"></span>  Edit
-          </button>
+  <div class="modal-body row">
+    <div class="col-md-6">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>AP Info.(ssid)</th>
+            <th>AP Info. (ip)</th>
+            <th>Sudoer ID</th>
+            <th>Sudoer Passwd</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="ap in aps">
+            <td>{[ ap.ssid ]}</td>
+            <td>{[ ap.ap_ip ]}</td>
+            <td>{[ ap.sudoer_id ]}</td>
+            <td>{[ ap.sudoer_passwd]}</td>
+            <td>
+              <button class="btn" ng-click="editRecord(ap)">
+                <span class="glyphicon glyphicon-pencil"></span>  Edit
+              </button>
 
-          <button class="btn btn-danger" ng-click="delRecord(ap)">
-          <span class="glyphicon glyphicon-remove"></span> Delete
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+              <button class="btn btn-danger" ng-click="delRecord(ap)">
+              <span class="glyphicon glyphicon-remove"></span> Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
   <hr>
   <button class="btn btn-success" ng-click="editRecord('new')">
-  <span class="glyphicon glyphicon-user"></span>  Create New QoS Rule
+  <span class="glyphicon glyphicon-user"></span>  Register New Target AP
   </button>
 
   <hr>
 
   <form class="form-horizontal" ng-hide="hideform">
-    <h3 ng-show="edit">Create New QoS Rule:</h3>
-    <h3 ng-hide="edit">Edit QoS Rule:</h3>
+    <h3 ng-show="edit">Create New Target AP:</h3>
+    <h3 ng-hide="edit">Edit Target AP Info.:</h3>
     <!--hidden value required-->
     <input type="hidden" name="id" value="">
     <div class="form-group">
       <label class="col-sm-2 control-label">AP ssid:</label>
       <div class="col-sm-10">
-      <input type="text" ng-model="submit_form.ssid" placeholder="ssid">
+      <input type="text" ng-model="submit_form.ssid" placeholder="djchoi_Pi_AP">
       </div>
     </div> 
     <div class="form-group">
       <label class="col-sm-2 control-label">AP ip:</label>
       <div class="col-sm-10">
-      <input type="text" ng-model="submit_form.ap_ip" placeholder="AP ip">
+      <input type="text" ng-model="submit_form.ap_ip" placeholder="147.46.121.107">
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Target ip/prefix:</label>
+      <label class="col-sm-2 control-label">Target Interface Name:</label>
       <div class="col-sm-10">
-      <input type="text" ng-model="submit_form.target_ip" placeholder="Target ip">
-      <input type="text" ng-model="submit_form.target_prefix" placeholder="Target prefix">
+      <input type="text" ng-model="submit_form.target_ifname" placeholder="wlan0">
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Target ports:</label>
+      <label class="col-sm-2 control-label">Sudoer ID:</label>
       <div class="col-sm-10">
-      <input type="text" ng-model="submit_form.target_ports" placeholder="Target ports">
+      <input type="text" ng-model="submit_form.sudoer_id" placeholder="mmlab">
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">Target Uplink Bandwidth (KB/s):</label>
+      <label class="col-sm-2 control-label">Sudoer Password:</label>
       <div class="col-sm-10">
-      <input type="text" ng-model="submit_form.uplink" placeholder="uplink">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-2 control-label">Target Downlink Bandwidth (KB/s):</label>
-      <div class="col-sm-10">
-      <input type="text" ng-model="submit_form.downlink" placeholder="downlink">
+      <input type="text" ng-model="submit_form.sudoer_passwd" placeholder="mmlab">
       </div>
     </div>
 

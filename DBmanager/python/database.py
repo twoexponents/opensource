@@ -193,7 +193,7 @@ class DBHandler():
     return True
 
 
-  def delete_ap_qos(self, id):
+  def delete_aps(self, id):
     if id is None:
       return
 
@@ -204,7 +204,7 @@ class DBHandler():
 
     try:
       sql = """
-        DELETE FROM qos_rules_actions
+        DELETE FROM qos_target_aps
         WHERE id = %s
         """%(id)
 

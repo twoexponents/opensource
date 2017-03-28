@@ -18,11 +18,9 @@ app.controller('qosCtrl', ['$rootScope', '$scope', '$http', function($rootScope,
   $scope.submit_form = {
     ssid: '',
     ap_ip: '',
-    target_ip: '',
-    target_prefix: '',
-    target_ports:'',
-    uplink:'',
-    downlink:''
+    target_ifname: '',
+    sudoer_id: '',
+    sudoer_passwd:''
   };
 
   $scope.getList = function() {
@@ -46,11 +44,9 @@ app.controller('qosCtrl', ['$rootScope', '$scope', '$http', function($rootScope,
 
       $scope.submit_form.ssid = '';
       $scope.submit_form.ap_ip= '';
-      $scope.submit_form.target_ip = '';
-      $scope.submit_form.target_prefix= '';
-      $scope.submit_form.target_ports='';
-      $scope.submit_form.uplink='';
-      $scope.submit_form.downlink='';
+      $scope.submit_form.target_ifname= '';
+      $scope.submit_form.sudoer_id= '';
+      $scope.submit_form.sudoer_passwd='';
 
     } else {
       $scope.edit = false;
@@ -60,11 +56,9 @@ app.controller('qosCtrl', ['$rootScope', '$scope', '$http', function($rootScope,
 
       $scope.submit_form.ssid = ap.ssid; 
       $scope.submit_form.ap_ip= ap.ap_ip;
-      $scope.submit_form.target_ip = ap.target_ip;
-      $scope.submit_form.target_prefix= ap.target_ip_prefix_bits;
-      $scope.submit_form.target_ports=ap.target_ports;
-      $scope.submit_form.uplink=ap.qos_bandwidth_uplink;
-      $scope.submit_form.downlink=ap.qos_bandwidth_downlink;
+      $scope.submit_form.target_ifname=ap.target_ifname;
+      $scope.submit_form.sudoer_id=ap.sudoer_id;
+      $scope.submit_form.sudoer_passwd=ap.sudoer_passwd;
 
     }
 
@@ -104,33 +98,20 @@ app.controller('qosCtrl', ['$rootScope', '$scope', '$http', function($rootScope,
 
   $scope.$watch('submit_form.ssid', function() {$scope.test();});
   $scope.$watch('submit_form.ap_ip', function() {$scope.test();});
-  $scope.$watch('submit_form.target_ip', function() {$scope.test();});
-  $scope.$watch('submit_form.target_prefix', function() {$scope.test();});
-  $scope.$watch('submit_form.target_ports', function() {$scope.test();});
-  $scope.$watch('submit_form.uplink', function() {$scope.test();});
-  $scope.$watch('submit_form.downlink', function() {$scope.test();});
+  $scope.$watch('submit_form.target_ifname', function() {$scope.test();});
+  $scope.$watch('submit_form.sudoer_id', function() {$scope.test();});
+  $scope.$watch('submit_form.sudoer_passwd', function() {$scope.test();});
   
 
   $scope.test = function() {
-    $scope.incomplete = true;
-    if ($scope.submit_form.ssid !== "" && 
-        $scope.submit_form.ap_ip !== "") {
-      $scope.incomplete = false;
-    }
-
-    if ($scope.submit_form.target_ip == "" &&
-        $scope.submit_form.target_ports == "") {
+    $scope.incomplete = false;
+    if ($scope.submit_form.ssid == "" ||
+        $scope.submit_form.ap_ip == "" ||
+        $scope.submit_form.target_ifname == "" ||
+        $scope.submit_form.sudoer_id == "" ||
+        $scope.submit_form.sudoer_passwd == "") {
       $scope.incomplete = true;
     }
-    else if ($scope.submit_form.target_ip !== "" &&
-            $scope.submit_form.target_prefix == "") {
-      $scope.incomplete = true;
-    }
-    else if ($scope.submit_form.uplink == "" &&
-            $scope.submit_form.downlink == "") {
-      $scope.incomplete = true;
-    }
-
   };
 
 
