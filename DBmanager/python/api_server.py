@@ -5,9 +5,12 @@ from database import DBHandler
 
 
 from flask import Flask, jsonify, request
-from flask.ext.restful import Api, Resource, reqparse
-from flask.ext.restful.utils import cors
-from flask.ext.cors import CORS
+#from flask.ext.restful import Api, Resource, reqparse
+from flask_restful import Api, Resource, reqparse
+from flask_restful.utils import cors
+#from flask.ext.restful.utils import cors
+#from flask.ext.cors import CORS
+from flask_cors import CORS
 
 from modules.ssh import QoSHandler
 

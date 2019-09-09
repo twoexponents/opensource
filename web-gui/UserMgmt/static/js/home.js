@@ -35,7 +35,8 @@ app.controller('homeCtrl', ['$rootScope', '$scope', '$http', '$location', '$wind
   };
 
   $scope.getList = function() {
-    $http.get("http://interest.snu.ac.kr:8000/api/user/all")
+    //$http.get("http://interest.snu.ac.kr:8000/api/user/all")
+    $http.get("http://147.47.208.190:8000/api/user/all")
       .success(function(response) {
         $scope.users = response;
       });
@@ -69,7 +70,8 @@ app.controller('homeCtrl', ['$rootScope', '$scope', '$http', '$location', '$wind
   };
 
   $scope.delUser = function(user) {
-    var _url = "http://interest.snu.ac.kr:8000/api/user/" + user.uid;
+    //var _url = "http://interest.snu.ac.kr:8000/api/user/" + user.uid;
+    var_url = "http://147.47.208.190:8000/api/user/" + user.uid;
       $http.delete(_url).success(function(response) {
         $scope.getList();
         $scope.hideform = true;
@@ -90,14 +92,16 @@ app.controller('homeCtrl', ['$rootScope', '$scope', '$http', '$location', '$wind
    };
 
   $scope.refresh = function() {
-    $http.get("http://interest.snu.ac.kr:8000/api/user/all")
+    //$http.get("http://interest.snu.ac.kr:8000/api/user/all")
+    $http.get("http://147.47.208.190:8000/api/user/all")
       .success(function(response) {
         $scope.users = response;
       });
   };
 
   $scope.submit = function() {
-    var _url = "http://interest.snu.ac.kr:8000/api/user/" + $scope.submit_form.uid;
+    //var _url = "http://interest.snu.ac.kr:8000/api/user/" + $scope.submit_form.uid;
+    var _url = "http://147.47.208.190:8000/api/user/" + $scope.submit_form.uid;
     var req = {
       method:'POST',
       url:_url,

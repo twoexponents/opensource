@@ -4,7 +4,7 @@ import json
 
 
 from flask import Flask, jsonify, request, render_template, redirect
-from flask.ext.restful import Api, Resource, reqparse
+from flask_restful import Api, Resource, reqparse
 
 
 app = Flask(__name__)

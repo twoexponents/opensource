@@ -140,7 +140,8 @@ class QoSHandler():
 
 
 if __name__ == '__main__':
-  h = QoSHandler('mmlab', 'mmlab', '147.46.121.107')
+  #h = QoSHandler('mmlab', 'mmlab', '147.46.121.107')
+  h = QoSHandler('mmlab', 'mmlab', '147.47.209.30')
   stdin, stdout, stderr, = h.send_cmd('echo mmlab|sudo -S ls -al')
 
   print ''.join(stdout.readlines())
